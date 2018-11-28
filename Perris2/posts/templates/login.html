@@ -1,0 +1,74 @@
+{% extends 'maqueta.html' %}
+{% load staticfiles %}
+{% block principal %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<script>
+        
+    $(document).ready(function(){
+        $("#username").autocomplete({
+            source: function(req,add){
+                var users = $("username").val();
+                $.ajax({
+                    url:'index3',
+                    async:false,
+                    dataType:'json',
+                    type:'POST',
+                    data:{
+                        'start':users,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },error:function(err){
+                        alert("error");
+                    }
+                    
+                });
+            }
+        });
+
+    });
+
+    $(document).ready(function(){
+        $("#passwd").autocomplete({
+            source: function(req,add){
+                var passwd = $("#passwd").val();
+                $.ajax({
+                    url:'index3',
+                    async:false,
+                    dataType:'json',
+                    type:'POST',
+                    data:{
+                        'start':users,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },error:function(err){
+                        alert("error");
+                    }
+                    
+                });
+            }
+        });
+
+    });
+
+</script>
+
+
+{% for result in results %}
+   
+
+{% endfor %}
+    <form id="registration_form" action="#" method="post">
+        <h1>Login</h1>
+            {% csrf_token %}
+        <div><h3>Nombre de Usuario : {{result.Usuario}}</h3>
+        <input type="text"name="username" class="form_text" id="username">
+        <span class="error" id="errorusuario"></span>
+        </div>   
+    <br>
+        <div><h3>Contraseña : {{result.Contraseña}}</h3>
+        <input type="password" name="password" class="form_text" name="Num" id="passwd">
+        <span class="error" id="errorcontraseña"></span>
+        </div> 
+        <div><input type="submit" value="Login" height="20" id="boton"></div> 
+        <a href="{% url 'social:begin' 'github' %}">Login con GitHub</a>
+    </form>
+    
+{% endblock %}

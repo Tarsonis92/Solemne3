@@ -1,0 +1,95 @@
+{% extends 'maqueta.html' %}
+{% load staticfiles %}
+
+{% block principal %}
+
+<link rel="stylesheet" href="{% static 'css/formularioPerros.css' %}">
+<script src="{% static 'js/agregarPerro.js' %}"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+
+{% for result in results %}
+
+{% endfor %}
+
+
+
+<form id="registroPerro" action="#" method="POST"> 
+  {% csrf_token  %}
+  <h1>Agregar Mascota</h1>
+            <div>codigo de Mascota :<input id="codigo" name="codigo" type="text" class="form_text" required></div>
+            <br>
+            <div>Imagen:<input id="imagen" name="imagen" type="file" class="file" name="pic" accept="image/*" required>
+            <span class="error" id="errorimagen"></span></div>
+            <br>
+            <div>Nombre de la Mascota : <input id="nombre" type="text" class ="" name="nombre" required></div>
+            <br>
+            <div>Edad de la Mascota : <input id="edad" type="text" class ="" name="nombre" required></div>
+            <br>
+            <div>Raza de la Mascota :{{result.razaMascota}}
+                <select id="raza" name="raza" required>
+                    <option value="op1" selected=”selected”>Ninguno</option> 
+                   <option value=”op2″ selected=”selected”>Pastor Aleman</option>
+                   <option value=”op3″ selected=”selected”>Pastor Ingles</option>
+                   <option value=”op4″ selected=”selected”>Pastor Afgano</option>
+                   <option value=”op5″ selected=”selected”>Rottweiler</option>
+                   <option value=”op6″ selected=”selected”>Pitbull</option>
+                   <option value=”op7″ selected=”selected”>Labrador</option>
+                   <option value=”op8″ selected=”selected”>BullDog Ingles</option>
+                   <option value=”op9″ selected=”selected”>BullDog</option>
+                   <option value=”op10″ selected=”selected”>Dobberman</option>
+                    <option value=”op11″ selected=”selected”>Akita</option>
+             </select>
+            </div>
+            <br>
+            <div>Descripcion :<textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea>></div> </div>
+            <br>
+            <div><input type="submit" value="Registrar"></div>
+</form>
+
+<table >
+  <thead>
+      <tr>
+          <th>CodigoMascota</th>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Raza</th>
+          <th>Descripcion</th>
+      </tr>
+  </thead>
+  <tbody id="tablita">
+
+  </tbody>
+</table>
+
+<script>
+    $("#registroPerro").submit(function(e) {
+        e.preventDefault();
+        var self= this;
+        $.ajax({
+            url:'http://localhost:8000/api/Mascotas',
+            type:'post',
+            data:{ 'codigo':$("#codigo").val(),
+            'imagen':$("#imagen").val(),
+            'nombre':$("#nombre").val(),
+            'edad':$("#edad").val(),
+            'raza':$("#raza").val(),
+            'descripcion':$("#descripcion").val(),           
+
+            csrfmiddleware: '{{ csrf_token }}'
+            },
+        async: false,
+        success: function(){
+            self.submit();
+        },
+        error: function(){
+            alert("error");
+        }            
+    });
+});
+
+</script>
+
+{% endblock %}
